@@ -6,7 +6,7 @@ unsigned char image[SIZE][SIZE];
 unsigned char image2[SIZE][SIZE];
 unsigned char result[SIZE][SIZE];
 
-void loadImage () {
+void loadImage () {//this function to load the image
   char imageFileName[100];
   cout << "Enter the source image file name: ";
   cin >> imageFileName;
@@ -14,7 +14,7 @@ void loadImage () {
   readGSBMP(imageFileName, image);
 }
 
-void saveImage () {
+void saveImage () {//this function to save the result image
   char imageFileName[100];
   cout << "Enter the target image file name: ";
   cin >> imageFileName;
@@ -22,16 +22,28 @@ void saveImage () {
   writeGSBMP(imageFileName, result);
 }
 
-void B_and_W() {
+
+/*
+1# Black and White Filter
+The main idea is that if the pixel value is from 127 to 255, make it white. otherwise, make it white. 
+*/
+void B_and_W() {//
   for (int i = 0; i < SIZE; i++)
     for (int j = 0; j< SIZE; j++){
-      if (image[i][j] > 127)
+      if (image[i][j] > 127) 
         result[i][j] = 255;
       else
         result[i][j] = 0;
     }
 }
 
+
+
+
+/*
+2# Invert Filter
+The main idea is that we invert the pixel value and just make it equal (255 - pixel value).
+*/
 void Inv(){
   for (int i = 0; i < SIZE; i++)
     for (int j = 0; j < SIZE; j++)
@@ -39,6 +51,13 @@ void Inv(){
   
 }
 
+
+
+
+/*
+3# Merge Filter
+The main idea is that we get the average of each of the two pixels value in image1 and image2
+*/
 void Mer(){
   char imageFileName[100];
   cout << "Please enter name of image file to merge with: ";
@@ -48,9 +67,13 @@ void Mer(){
 
   for (int i = 0; i < SIZE; i++)
     for (int j = 0; j < SIZE; j++)
-      result[i][j] = (image[i][j] + image2[i][j]) / 2;
+      result[i][j] = (image[i][j] + image2[i][j]) / 2;//get avr of two pixels
 }
 
+
+
+
+// 4# Flip Image Filter
 void Flip(){
   cout << "Flip (h)orizontally or (v)ertically ? ";
   char op;
@@ -66,12 +89,18 @@ void Flip(){
         result[i][j] = image[SIZE-i-1][j];
 }
 
+
+
+/*
+5# Rotate Image Filter
+The main idea is that we get the number of rotations by dividing the degree by 90.
+So for example, if the degree value is 90 now, we should rotate it just one time, and if it is 180, we should rotate it two times (2*90) and three times for 270 degrees (3*90).
+*/
 void Rotate(){
   cout << "Rotate (90), (180) or (270) degrees? ";
   int op;
   cin >> op;
   op = op / 90;//number of rotations
-  // unsigned char temp[SIZE][SIZE];
 
   while (op--)
   {
@@ -86,6 +115,13 @@ void Rotate(){
   }
 }
 
+
+
+/*
+6# Darken and Lighten Filter
+The main idea is that to check if the user wants the image is lighted, we merge it with a white color according to this formula: (pixel value + 255)/2.
+and if he wants it darkened, we merge it black according to this formula: (pixel value + 0)/2 --> pixel value / 2. 
+*/
 void D_and_L(){
   cout << "Do you want to (d)arken or (l)ighten? ";
   char op;
@@ -96,55 +132,81 @@ void D_and_L(){
 
 }
 
-//Detected image
-void det(){
-  long long avr = 0;
+
+
+
+/*
+7# Detect Image Edges Filter
+The main idea is that we calculate the avrage (avr) of all pixels in the image by summating all pixel values and dividing it by the number of pixels (265*265).
+and the itarate over all pixels If it is greater than (AVR) and one of the two pixels behind it from right or down is less than (AVR), then I consider it a node, or if one of the two pixels behind it from right or down is greater and our pixel is less than (AVR). else it is not a node.
+*/
+void detect(){
+  long long AVR = 0;
   for (int i = 0; i < SIZE; i++)
     for (int j = 0; j < SIZE; j++){
-      avr += image[i][j];
+      AVR += image[i][j];
     }
-  avr /= (256*256);
+  AVR /= (256*256);
+  
   for (int i = 0; i < SIZE; i++)
     for (int j = 0; j < SIZE; j++){
-      if(((image[i][j] - avr) * (image[i+1][j] - avr) < 0) || ((image[i][j] - avr) * (image[i][j+1] - avr) < 0))
+      if(((image[i][j] - AVR) * (image[i+1][j] - AVR) < 0) || ((image[i][j] - AVR) * (image[i][j+1] - AVR) < 0))
         result[i][j] = 0;
       else 
         result[i][j] = 255;
     }
 }
+
+
+/*
+8# Filter Name
+...
+*/
+
+
 int main()
 {
   cout << "Ahlan ya user ya habibi\n";
-  loadImage();
-  cout << "Please select a filter to apply or 0 to exit:\n";
-  cout << "1- Black & White Filter\n";
-  cout << "2- Invert Filter\n";
-  cout << "3- Merge Filter\n";
-  cout << "4- Flip Image\n";
-  cout << "5- Rotate Image\n";
-  cout << "6- Darken and Lighten Image\n";
-  cout << "7- Detect Image Edges\n";
-  cout << "0- To exit\n";
-  int op;
-  cin >> op;
-  if(op == 1)
-    B_and_W();
-  else if(op == 2)
-    Inv();
-  else if(op == 3)
-    Mer();
-  else if(op == 4)
-    Flip();
-  else if(op == 5)
-    Rotate();
-  else if(op == 6)
-    D_and_L();
-  else if(op == 7)
-    det();
-  else if(op == 0)
-    return 0;
-
-
-
-  saveImage();
+  int op, cont;
+  do
+  {
+    
+    loadImage();// the menu, from which the user can choose one of these options.
+    cout << "Please select a filter to apply or 0 to exit:\n";
+    cout << "1- Black & White Filter\n";
+    cout << "2- Invert Filter\n";
+    cout << "3- Merge Filter\n";
+    cout << "4- Flip Image\n";
+    cout << "5- Rotate Image\n";
+    cout << "6- Darken and Lighten Image\n";
+    cout << "7- Detect Image Edges\n";
+    cout << "0- To exit\n";
+    cin >> op;
+    if(op == 1)
+      B_and_W();
+    else if(op == 2)
+      Inv();
+    else if(op == 3)
+      Mer();
+    else if(op == 4)
+      Flip();
+    else if(op == 5)
+      Rotate();
+    else if(op == 6)
+      D_and_L();
+    else if(op == 7)
+      detect();
+    // else if(op == 8)
+    //   call the function
+      
+    else if(op == 0)//to exit
+      return 0;
+     
+     
+    /*Save the image after applying a filter.*/
+    saveImage();  
+    cout << "\n\nEnter 1 to continue, and 0 to exit: ";
+    cin >> cont;
+  } while (op && cont);
+  
 }
