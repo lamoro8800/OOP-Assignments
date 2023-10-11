@@ -138,7 +138,7 @@ void D_and_L(){
 /*
 7# Detect Image Edges Filter
 The main idea is that we calculate the avrage (avr) of all pixels in the image by summating all pixel values and dividing it by the number of pixels (265*265).
-and the itarate over all pixels If it is greater than (AVR) and one of the two pixels behind it from right or down is less than (AVR), then I consider it a node, or if one of the two pixels behind it from right or down is greater and our pixel is less than (AVR). else it is not a node.
+and the itarate over all pixels If it is greater than (AVR) and one of the two her side pixels from right or down is less than (AVR), then I consider it a node, or if one of the two her side pixels from right or down is greater and our pixel is less than (AVR). else it is not a node.
 */
 void detect(){
   long long AVR = 0;
@@ -158,11 +158,56 @@ void detect(){
 }
 
 
+
 /*
 8# Filter Name
 ...
 */
 
+
+
+
+/*
+9# Filter Name
+...
+*/
+
+
+
+/*
+10# Mirror Image Filter
+The main idea is that we determine which half will be changed and make it equal to the reverse of another half. It is easy.
+*/
+void Mirror(){
+  cout << "Mirror (l)eft, (r)ight, (u)pper, (d)own side? ";
+  char op;
+  int s1, s2, e1, e2;
+  cin >> op;
+
+  if(op == 'l')
+    s1 = 0, e1 = 256, s2 = 128, e2 = 256;
+  else if(op == 'r')
+    s1 = 0, e1 = 256, s2 = 0, e2 = 128;
+  else if(op == 'u')
+    s1 = 128, e1 = 256, s2 = 0, e2 = 256;
+  else if(op == 'd')
+    s1 = 0, e1 = 128, s2 = 0, e2 = 256;
+  
+  for (int i = 0; i < 256; i++)
+    for (int j = 0; j < 256; j++){
+      if(i >= s1 && i < e1 && j >= s2 && j < e2){
+        if(op == 'r' || op == 'l')
+          result[i][j] = image[i][SIZE-j-1];
+        else 
+          result[i][j] = image[SIZE-i-1][j];
+      }else{
+        result[i][j] = image[i][j];
+      }
+      
+      //This line can do the same thing instead of if and else.
+      // result[i][j] = ((i >= s1 && i < e1 && j >= s2 && j < e2 ? op == 'r' || op == 'l' ? image[i][SIZE-j-1] : image[SIZE-i-1][j] : image[i][j]);
+    }
+}
 
 int main()
 {
@@ -172,6 +217,7 @@ int main()
   {
     
     loadImage();// the menu, from which the user can choose one of these options.
+    cout << "Ahlan ya user ya habibi\n";
     cout << "Please select a filter to apply or 0 to exit:\n";
     cout << "1- Black & White Filter\n";
     cout << "2- Invert Filter\n";
@@ -180,7 +226,9 @@ int main()
     cout << "5- Rotate Image\n";
     cout << "6- Darken and Lighten Image\n";
     cout << "7- Detect Image Edges\n";
-    cout << "0- To exit\n";
+    //cout << "8- \n";
+    //cout << "9- ";
+    cout << "10- Mirror 1/2 Image\n";
     cin >> op;
     if(op == 1)
       B_and_W();
@@ -197,10 +245,11 @@ int main()
     else if(op == 7)
       detect();
     // else if(op == 8)
-    //   call the function
-      
-    else if(op == 0)//to exit
-      return 0;
+      // call the function
+    // else if(op == 9)
+      // call the function
+    else if(op == 10)
+      Mirror();
      
      
     /*Save the image after applying a filter.*/
