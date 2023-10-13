@@ -35,6 +35,10 @@ void B_and_W() {//
       else
         result[i][j] = 0;
     }
+
+  for (int i = 0; i < SIZE; i++)
+    for (int j = 0; j< SIZE; j++)
+      image[i][j] = result[i][j];
 }
 
 
@@ -48,7 +52,11 @@ void Inv(){
   for (int i = 0; i < SIZE; i++)
     for (int j = 0; j < SIZE; j++)
       result[i][j] = 255 - image[i][j];
+
   
+  for (int i = 0; i < SIZE; i++)
+    for (int j = 0; j< SIZE; j++)
+      image[i][j] = result[i][j]; 
 }
 
 
@@ -68,6 +76,12 @@ void Mer(){
   for (int i = 0; i < SIZE; i++)
     for (int j = 0; j < SIZE; j++)
       result[i][j] = (image[i][j] + image2[i][j]) / 2;//get avr of two pixels
+
+
+  
+  for (int i = 0; i < SIZE; i++)
+    for (int j = 0; j< SIZE; j++)
+      image[i][j] = result[i][j];
 }
 
 
@@ -87,6 +101,12 @@ void Flip(){
     for (int i = 0; i < SIZE; i++)
       for (int j = 0; j < SIZE; j++)
         result[i][j] = image[SIZE-i-1][j];
+
+
+  
+  for (int i = 0; i < SIZE; i++)
+    for (int j = 0; j< SIZE; j++)
+      image[i][j] = result[i][j];
 }
 
 
@@ -113,6 +133,11 @@ void Rotate(){
         image[i][j] = result[i][j];
      
   }
+
+  
+  for (int i = 0; i < SIZE; i++)
+    for (int j = 0; j< SIZE; j++)
+      image[i][j] = result[i][j];
 }
 
 
@@ -126,10 +151,14 @@ void D_and_L(){
   cout << "Do you want to (d)arken or (l)ighten? ";
   char op;
   cin >> op;//if user chose darken marge image with balck color
-    for (int i = 0; i < SIZE; i++)//and if he chose lighten image marge with white color
-      for (int j = 0; j < SIZE; j++)
-        result[i][j] = (op == 'd') ? image[i][j] / 2 :  (image[i][j] + 255) / 2;
+  for (int i = 0; i < SIZE; i++)//and if he chose lighten image marge with white color
+    for (int j = 0; j < SIZE; j++)
+      result[i][j] = (op == 'd') ? image[i][j] / 2 :  (image[i][j] + 255) / 2;
 
+  
+  for (int i = 0; i < SIZE; i++)
+    for (int j = 0; j< SIZE; j++)
+      image[i][j] = result[i][j];
 }
 
 
@@ -155,6 +184,12 @@ void detect(){
       else 
         result[i][j] = 255;
     }
+
+  
+
+  for (int i = 0; i < SIZE; i++)
+    for (int j = 0; j< SIZE; j++)
+      image[i][j] = result[i][j];
 }
 
 
@@ -207,17 +242,61 @@ void Mirror(){
       //This line can do the same thing instead of if and else.
       // result[i][j] = ((i >= s1 && i < e1 && j >= s2 && j < e2 ? op == 'r' || op == 'l' ? image[i][SIZE-j-1] : image[SIZE-i-1][j] : image[i][j]);
     }
+
+
+  
+  
+  for (int i = 0; i < SIZE; i++)
+    for (int j = 0; j< SIZE; j++)
+      image[i][j] = result[i][j];
 }
 
+
+
+
+/*
+11# Filter Name
+...
+*/
+
+
+
+/*
+12# Filter Name
+...
+*/
+
+
+/*
+13# Crop Image Filter
+The main idea is that we make the result image white and then scan (x, y) from the user and iterate from this point to make a rectangle with width = w and length = l.
+*/
+void crop(){
+  cout << "Please enter x y l w: ";
+  int x, y, l, w;
+  cin >> x >> y >> l >> w;
+  for (int i = 0; i < 256; i++)//make the image white
+    for (int j = 0; j < 256; j++)
+      result[i][j] = 255;
+
+  //min(256, x+w) to check bounders
+  for (int i = x; i < min(256, x+w); i++)
+    for (int j = y; j < min(256, y+l); j++)
+      result[i][j] = image[i][j];
+
+
+  
+  for (int i = 0; i < SIZE; i++)
+    for (int j = 0; j< SIZE; j++)
+      image[i][j] = result[i][j];
+}
 int main()
 {
   cout << "Ahlan ya user ya habibi\n";
-  int op, cont;
-  do
+  loadImage();
+  int op;
+  do// the menu, from which the user can choose one of these options.
   {
-    
-    loadImage();// the menu, from which the user can choose one of these options.
-    cout << "Ahlan ya user ya habibi\n";
     cout << "Please select a filter to apply or 0 to exit:\n";
     cout << "1- Black & White Filter\n";
     cout << "2- Invert Filter\n";
@@ -226,9 +305,18 @@ int main()
     cout << "5- Rotate Image\n";
     cout << "6- Darken and Lighten Image\n";
     cout << "7- Detect Image Edges\n";
-    //cout << "8- \n";
+    //cout << "8- ";
     //cout << "9- ";
     cout << "10- Mirror 1/2 Image\n";
+    //cout << "11- ";
+    //cout << "12- ";
+    cout << "13- Crop Image\n";
+    //cout << "14- ";
+    //cout << "15- ";
+    cout << "16- Save the image to a file\n";
+    cout << "0- Exit\n";
+
+
     cin >> op;
     if(op == 1)
       B_and_W();
@@ -244,18 +332,33 @@ int main()
       D_and_L();
     else if(op == 7)
       detect();
-    // else if(op == 8)
-      // call the function
-    // else if(op == 9)
-      // call the function
+    
+    //8
+    
+    //9
+
     else if(op == 10)
       Mirror();
-     
-     
+    
+    //11
+
+    //12
+
+    else if(op == 13)
+      crop();
+
+    //14
+    
+    //15
+
     /*Save the image after applying a filter.*/
-    saveImage();  
-    cout << "\n\nEnter 1 to continue, and 0 to exit: ";
-    cin >> cont;
-  } while (op && cont);
+    else if(op == 16)
+    {
+      saveImage(); 
+      return 0;
+    }  
+
+    cout << "\n\n";
+  } while (op);
   
 }
