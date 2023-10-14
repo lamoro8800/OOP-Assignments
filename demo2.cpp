@@ -345,7 +345,7 @@ int main()
     //cout << "9- ";
     cout << "10- Mirror 1/2 Image\n";
     //cout << "11- ";
-    //cout << "12- ";
+    cout << "12- Blur Image\n ";
     cout << "13- Crop Image\n";
     //cout << "14- ";
     //cout << "15- ";
@@ -378,8 +378,11 @@ int main()
     
     //11
 
-    //12
-
+    else if(op == 12)
+      blur();
+      blur();
+      blur();
+      
     else if(op == 13)
       crop();
 
