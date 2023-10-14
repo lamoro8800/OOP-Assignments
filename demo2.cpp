@@ -378,10 +378,11 @@ int main()
     
     //11
 
-    else if(op == 12)
+    else if(op == 12){
       blur();
       blur();
       blur();
+    }
       
     else if(op == 13)
       crop();
