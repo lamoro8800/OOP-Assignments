@@ -262,9 +262,45 @@ void Mirror(){
 
 
 /*
-12# Filter Name
-...
+12# blur image
+The main idea is that we collect each pixel and the pixels around it from every direction and divide the by their number, and the whole image is equal to the result.
 */
+
+bool valid(int n,int y){
+    if(n>=0 && n<256 && y>=0 && y<256){
+        return true;
+    }else{
+        return false;
+    }
+}
+void blur(){
+
+    int dx[]={1, 0, 0, -1, -1, 1, -1, 1};
+    int dy[]={0, 1, -1, 0, 1, 1, -1, -1};
+
+    for(int x=0;x<256;x++){
+        for(int y=0;y<256;y++){
+            int cnt=0;
+            int sum=0,avr;
+            for (int i = 0; i < 8; i++)
+            {
+                int nx = x+dx[i], ny = y+dy[i];
+                if(valid(nx, ny)){
+                    sum += image[nx][ny];
+                    cnt++;
+                }
+            }
+            sum += image[x][y]; cnt++;
+            avr = sum/cnt;
+            result[x][y] = avr;
+
+        }
+    }
+    for (int i = 0; i < SIZE; i++)
+        for (int j = 0; j< SIZE; j++)
+            image[i][j] = result[i][j];
+
+}
 
 
 /*
