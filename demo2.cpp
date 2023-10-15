@@ -203,11 +203,31 @@ void detect(){
 
 
 /*
-9# Filter Name
-...
+9# Filter shrink
+The main idea is that first we make the result image white and then get (avr) for each two pixels and put it in just one pixel, that's it
 */
+void shrink(){
+    string op;
+    cout<<"shrink to (1/2), (1/3) or (1/4) ";
+    cin >> op;
+    int x = op[2]-'0';
 
+    for (int i = 0; i < 256; i++)
+        for (int j = 0; j < 265; j++)
+            result[i][j] = 255;
 
+    int sum = 0;
+    for (int i = 0; i < 256; i++)
+        for (int j = 0; j < 265; j++){
+            if(j%x == 0)sum = 0;
+            sum += image[i][j];
+            result[i/x][j/x] = sum/x;
+        }
+
+    for (int i = 0; i < SIZE; i++)
+        for (int j = 0; j< SIZE; j++)
+            image[i][j] = result[i][j];
+}
 
 /*
 10# Mirror Image Filter
@@ -342,10 +362,10 @@ int main()
     cout << "6- Darken and Lighten Image\n";
     cout << "7- Detect Image Edges\n";
     //cout << "8- ";
-    //cout << "9- ";
+    //cout << "9- Shrink Image\n";
     cout << "10- Mirror 1/2 Image\n";
     //cout << "11- ";
-    cout << "12- Blur Image\n ";
+    cout << "12- Blur Image\n";
     cout << "13- Crop Image\n";
     //cout << "14- ";
     //cout << "15- ";
@@ -371,7 +391,8 @@ int main()
     
     //8
     
-    //9
+    else if(op == 9)
+      shrink();
 
     else if(op == 10)
       Mirror();
