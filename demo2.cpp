@@ -401,6 +401,42 @@ void skew_ho(){
 
 }
 
+
+/*
+  #15 Skew vertically
+
+ */
+void skew_ve(){
+    for(int i=0;i<SIZE;i++){
+        for(int j=0;j<SIZE;j++){
+            image2[i][j]=255;
+            result[i][j]=255;
+        }
+    }
+    double ang;
+    cout<<"enter the angle : ";
+    cin>>ang;
+    ang = (ang * 22)/(180 * 7);
+    int x = (int)SIZE / (1 + (1/tan(ang)));
+    for(int i=0;i<SIZE;++i){
+        for(int j=0;j<SIZE;++j){
+            image2[ i * x / SIZE][j]=image[i][j];
+        }
+    }
+    double step = SIZE - x;
+    double move = step / SIZE;
+    for(int i=0;i<SIZE;++i){
+        for(int j=0;j<SIZE ;++j){
+            result[(int)step+i][j]=image2[i][j];
+        }
+        step-=move;
+    }
+    for (int i = 0; i < SIZE; ++i)
+        for (int j = 0; j< SIZE; ++j)
+            image[i][j] = result[i][j];
+
+}
+
 int main()
 {
   cout << "Ahlan ya user ya habibi\n";
@@ -417,13 +453,13 @@ int main()
     cout << "6- Darken and Lighten Image\n";
     cout << "7- Detect Image Edges\n";
     cout << "8- Enlarge Image\n";
-    //cout << "9- Shrink Image\n";
+    cout << "9- Shrink Image\n";
     cout << "10- Mirror 1/2 Image\n";
     //cout << "11- ";
     cout << "12- Blur Image\n";
     cout << "13- Crop Image\n";
     cout << "14- Skew the Image Horizontally\n";
-    //cout << "15- ";
+    cout << "15- Skew the Image vertically\n";
     cout << "16- Save the image to a file\n";
     cout << "0- Exit\n";
 
@@ -469,7 +505,9 @@ int main()
             skew_ho();
         }
     
-    //15
+    else if(op == 15){
+            skew_ve();
+        }
 
     /*Save the image after applying a filter.*/
     else if(op == 16)
