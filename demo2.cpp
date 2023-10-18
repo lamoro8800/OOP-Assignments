@@ -346,6 +346,41 @@ void crop(){
     for (int j = 0; j< SIZE; j++)
       image[i][j] = result[i][j];
 }
+/*
+  #14 Skew Horizontally
+the main idea that we take the angle from user and 
+ */
+void skew_ho(){
+    for(int i=0;i<SIZE;i++){
+        for(int j=0;j<SIZE;j++){
+            image2[i][j]=255;
+            result[i][j]=255;
+        }
+    }
+    double ang;
+    cout<<"enter the angle : ";
+    cin>>ang;
+    ang = (ang * 22)/(180 * 7);
+    int x = (int)SIZE / (1 + (1/tan(ang)));
+    for(int i=0;i<SIZE;++i){
+        for(int j=0;j<SIZE;++j){
+            image2[i][ j * x / SIZE]=image[i][j];
+        }
+    }
+    double step = SIZE - x;
+    double move = step / SIZE;
+    for(int i=0;i<SIZE;++i){
+        for(int j=0;j<SIZE ;++j){
+            result[i][(int)step+j]=image2[i][j];
+        }
+        step-=move;
+    }
+    for (int i = 0; i < SIZE; ++i)
+        for (int j = 0; j< SIZE; ++j)
+            image[i][j] = result[i][j];
+
+}
+
 int main()
 {
   cout << "Ahlan ya user ya habibi\n";
@@ -367,7 +402,7 @@ int main()
     //cout << "11- ";
     cout << "12- Blur Image\n";
     cout << "13- Crop Image\n";
-    //cout << "14- ";
+    cout << "14- Skew the Image Horizontally\n";
     //cout << "15- ";
     cout << "16- Save the image to a file\n";
     cout << "0- Exit\n";
@@ -408,7 +443,9 @@ int main()
     else if(op == 13)
       crop();
 
-    //14
+    else if(op == 14){
+            skew_ho();
+        }
     
     //15
 
