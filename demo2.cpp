@@ -195,11 +195,31 @@ void detect(){
 
 
 /*
-8# Filter Name
-...
+8# Enlarge Image filter
+The main idea is that  we take the part that the user chose,double the size of one pixel,and put it into four pixels.
 */
+void Enlarge(){
+    int op;
+    cout<<"Which quarter to enlarge 1, 2, 3 or 4 ? ";
+    cin >> op;
+    int x, y;
+    if(op == 1)
+        x = 0, y = 0;
+    else if(op == 2)
+        x = 0, y = 128;
+    else if(op == 3)
+        x = 128, y = 128;
+    else if(op == 4)
+        x = 128, y = 0;
 
+    for (int i = 0; i < 256; i++)
+        for (int j = 0; j < 256; j++)
+            result[i][j] = image[x+i/2][y+j/2];
 
+    for (int i = 0; i < SIZE; i++)
+        for (int j = 0; j< SIZE; j++)
+            image[i][j] = result[i][j];
+}
 
 
 /*
@@ -396,7 +416,7 @@ int main()
     cout << "5- Rotate Image\n";
     cout << "6- Darken and Lighten Image\n";
     cout << "7- Detect Image Edges\n";
-    //cout << "8- ";
+    cout << "8- Enlarge Image\n";
     //cout << "9- Shrink Image\n";
     cout << "10- Mirror 1/2 Image\n";
     //cout << "11- ";
@@ -424,7 +444,9 @@ int main()
     else if(op == 7)
       detect();
     
-    //8
+    else if(op == 8){
+            Enlarge();
+        }
     
     else if(op == 9)
       shrink();
