@@ -168,4 +168,155 @@ public:
     }
 };
  
- 
+
+
+// Memory methods implementation
+Memory::Memory(){
+    m.reserve(256);
+}
+void Memory::setMemory(int& address, string s){
+    m[address] = s;
+    address++;
+}
+string Memory::getMemory(int& i){
+    return m[i];
+}
+void Memory::clearCell(int& address) {
+    m[address] = "00";
+}
+
+
+
+//Register methods implementation
+Register::Register(){
+    r.resize(16);
+}
+void Register::setRegister(int& address, string s){
+    r[address] = s;
+    address++;
+}
+string Register::getRegister(int& i){
+    return r[i];
+}
+void Register::clearCell(int& address) {
+    r[address] = "00";
+}
+
+
+
+//Machine methods implementation
+//Machine constructor
+Machine::Machine(){
+    //set memory with "00"
+    for (int i = 0; i < 256;)
+        storage.setMemory(i, "00");
+
+    //set the register with "0";
+    for (int i = 0; i < 16;)
+        processor.setRegister(i, "00");
+
+    addingAddress = 0;
+    programIndex = 0;
+}
+
+//this method gets a new instruction as an input
+void Machine::getNewIstrauction(){
+    string s;
+    cout << "Enter the new instrauction: ";
+    cin >> s;
+    string tmp = s.substr(0, 2);
+    storage.setMemory(addingAddress, tmp);
+    tmp = s.substr(2, 2);
+    storage.setMemory(addingAddress, tmp);
+
+}
+
+//this method gets instructions from file and set it in the memory
+void Machine::loadFromFile(){
+    string Input;
+    cout << "Enter file name: ";
+    cin >> Input;
+    Input += ".txt";
+    //open the file
+    ifstream file(Input);
+    //checking if it open or not
+    if(!file.is_open()){
+        cout << "Error: Couldn't open the file " << Input << endl;
+        return;
+    }
+
+    string tmp, tmp1;
+    while (!file.eof())
+    {
+        file >> tmp;
+        //Usually the hexadecimal number is like 0xff, so I want to take "ff" only and set "ff" in the memory.
+        if(tmp.size() == 3)
+            tmp1.push_back(tmp[2]);
+        else
+            tmp1 = tmp.substr(2, 2);
+
+        if(tmp1.size() == 2)
+            storage.setMemory(addingAddress, tmp1), tmp1.clear();
+
+    }
+    file.close();
+}
+
+
+//run instructions funcion
+void Machine::runInstructions(){
+    int cnt = 0;
+    while(addingAddress - programIndex >= 2){//there is at least 1 instruction (2 idexes) between them this is valid otherwise it is invalid
+        cnt++;
+        string instr;
+        instr += storage.getMemory(programIndex);
+        programIndex++;
+        instr += storage.getMemory(programIndex);
+        programIndex++;
+
+        Instruction* ptr;
+        //instruction options
+        if(instr.front() == '1')
+            ptr = new LoadInstruction;
+        else if(instr.front() == '2')
+            ptr = new LoadInstruction1;
+        else if(instr.front() == '3'){
+            if (instr.substr(2, 2) == "00") 
+                ptr = new StoreInstruction1();
+            else 
+                ptr = new StoreInstruction();
+        }
+
+        else if(instr.front() == '4')
+            ptr = new MoveInstruction();
+        else if(instr.front() == '5')
+            ptr = new AddInstruction();
+        else if(instr.front()=='B')
+            ptr = new JumpInstruction ;
+        if (instr.front() == 'C') 
+            ptr = new HaltInstruction();
+        else{
+            cout << "Invalid instruction!\n\n";
+            return;
+        }
+        int i = ToInteger(instr.substr(1, 1));
+        int j = ToInteger(instr.substr(2, 2));
+        ptr->doSomething(storage, processor, i, j, programIndex);
+    }
+    if(!cnt)
+        cout << "Invalid instruction\n\n";
+}
+//this function used to print the Memory on the screen
+void Machine::displayMemory(){
+    cout << "Memory:\n";
+    for (int i = 0; i < 256; i++)
+        cout << setw(3) << i << "-  " << storage.getMemory(i) << '\n';
+    //setw for set width this is a function to align the output
+}
+// this function used to print the Register on the screen
+void Machine::displayRegister(){
+    cout << "Register:\n";
+    for (int i = 0; i < 16; i++)
+        cout << setw(3) << i << "-  " << processor.getRegister(i) << '\n';
+
+}
