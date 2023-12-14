@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
- 
- 
+
+
 //Memory class
 //attributes: vector <string> m
 //functions: constructor, setMemory, clearCell
@@ -14,8 +14,8 @@ public:
     string getMemory(int&);
     void clearCell(int&);
 };
- 
- 
+
+
 //Register class
 //attributes: vector <string> r
 //functions: constructor, setRegister, clearCell
@@ -73,7 +73,7 @@ class Instruction {
 public:
     virtual void doSomething(Memory&, Register&, int, int, int&) {}
 };
- 
+
 class LoadInstruction : public Instruction {
 public:
     void doSomething(Memory& memory, Register& registe, int regNum, int address, int& idx) {
@@ -81,8 +81,8 @@ public:
         registe.setRegister(regNum, data);
     }
 };
- 
- 
+
+
 class LoadInstruction1 : public Instruction {
 public:
     void doSomething(Memory& memory, Register& registe, int regNum, int address, int& idx) {
@@ -92,7 +92,7 @@ public:
         registe.setRegister(regNum, s);
     }
 };
- 
+
 class StoreInstruction : public Instruction {
 public:
     void doSomething(Memory &memory, Register& registe, int regNum, int address, int& idx) {
@@ -100,7 +100,7 @@ public:
         memory.setMemory(address, data);
     }
 };
- 
+
 class StoreInstruction1 : public Instruction {
 public:
     void doSomething(Memory &memory, Register& registe, int regNum, int address, int& idx) {
@@ -108,14 +108,14 @@ public:
         cout << "Register[" << regNum << "]:  " <<  data << '\n';
     }
 };
- 
+
 class MoveInstruction : public Instruction {
 public:
     void doSomething(Memory &memory, Register& registe, int regNum, int address, int& idx) {
             string RS = ToHexa(address);
             while(RS.size() < 2)
                 RS = '0' + RS;
- 
+
             int R = ToInteger(RS.substr(0, 1));
             int S = ToInteger(RS.substr(1, 1));
             string data = registe.getRegister(R);
@@ -123,7 +123,7 @@ public:
         }
     }
 ;
- 
+
 class AddInstruction : public Instruction {
 private:
     string performTwoComplementAddition(int& dataS,int& dataT){
@@ -135,29 +135,29 @@ public:
             string ST = ToHexa(address);
             while(ST.size() < 2)
                 ST = '0' + ST;
- 
+
             int regS = ToInteger(ST.substr(0, 1));
             int regT = ToInteger(ST.substr(1, 1));
- 
+
             int dataS =  ToInteger(registe.getRegister(regS));
             int dataT = ToInteger(registe.getRegister(regT));
- 
+
             string result = performTwoComplementAddition(dataS, dataT);
             registe.setRegister(regR, result);
         }
     };
- 
- 
+
+
 class JumpInstruction : public Instruction {
 public:
     void doSomething(Memory &memory, Register& registe, int regR, int address, int& idx) {
         string dataR = registe.getRegister(regR);
         int i = 0;
         string dataZero = registe.getRegister(i);
- 
+
         if (dataR == dataZero)
             idx = address;
- 
+
     }
 };
 class HaltInstruction : public Instruction {
@@ -167,7 +167,7 @@ public:
         cout << "Halting program execution." << endl;
     }
 };
- 
+
 
 
 // Memory methods implementation
@@ -224,7 +224,7 @@ void Machine::getNewIstrauction(){
     string s;
     cout << "Enter the new instrauction: ";
     cin >> s;
-    string tmp = s.substr(0, 2);
+    string tmp = s.substr(0, 2);//204A
     storage.setMemory(addingAddress, tmp);
     tmp = s.substr(2, 2);
     storage.setMemory(addingAddress, tmp);
@@ -250,9 +250,9 @@ void Machine::loadFromFile(){
     {
         file >> tmp;
         //Usually the hexadecimal number is like 0xff, so I want to take "ff" only and set "ff" in the memory.
-        if(tmp.size() == 3)
+        if(tmp.size() == 3)//0x4 0xB
             tmp1.push_back(tmp[2]);
-        else
+        else//0x4A
             tmp1 = tmp.substr(2, 2);
 
         if(tmp1.size() == 2)
@@ -261,7 +261,10 @@ void Machine::loadFromFile(){
     }
     file.close();
 }
-
+/*
+20
+A4
+*/
 
 //run instructions funcion
 void Machine::runInstructions(){
@@ -272,7 +275,7 @@ void Machine::runInstructions(){
         instr += storage.getMemory(programIndex);
         programIndex++;
         instr += storage.getMemory(programIndex);
-        programIndex++;
+        programIndex++;//204A
 
         Instruction* ptr;
         //instruction options
@@ -293,10 +296,11 @@ void Machine::runInstructions(){
             ptr = new AddInstruction();
         else if(instr.front()=='B')
             ptr = new JumpInstruction ;
-        if (instr.front() == 'C') 
+        else if (instr.front() == 'C') 
             ptr = new HaltInstruction();
         else{
             cout << "Invalid instruction!\n\n";
+            cout << instr << " instr\n";
             return;
         }
         int i = ToInteger(instr.substr(1, 1));
@@ -305,6 +309,8 @@ void Machine::runInstructions(){
     }
     if(!cnt)
         cout << "Invalid instruction\n\n";
+    else 
+        cout << "The instructions run successfully\n\n";
 }
 //this function used to print the Memory on the screen
 void Machine::displayMemory(){
