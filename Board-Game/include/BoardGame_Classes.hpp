@@ -29,6 +29,18 @@ public:
     virtual bool game_is_over() = 0;
 };
 
+// This class represents a 3 x 3 board
+// used in X_O game
+class X_O_Board:public Board {
+public:
+    X_O_Board ();
+    bool update_board (int x, int y, char mark);
+    void display_board();
+    bool is_winner();
+    bool is_draw();
+    bool game_is_over();
+};
+
 //tic tac tow board
 class Tic_Tac_Toe_board:public Board{
 public:
@@ -55,9 +67,6 @@ public:
     bool game_is_over();
 };
 
-
-
-//////////////////////////////////
 //five by five game
 class FiveBF_board:public Board {
 public:
@@ -150,4 +159,5 @@ public:
     TicTacToeGameManager(Board* bPtr, Player* playerPtr[2]);
     void run();
 };
+
 #endif
