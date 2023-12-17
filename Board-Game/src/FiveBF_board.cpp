@@ -59,33 +59,31 @@ bool FiveBF_board::is_winner()
         char u='X';
         for(int z=0; z<2; z++)
         {
-            // Check rows and columns
             for (int i = 0; i < 5; i++)
             {
-                for (int j = 0; j <3; j++)
+                for (int j = 0; j <5; j++)
                 {
-                    if (board[i][j] == u && board[i][j + 1] == u && board[i][j + 2] == u)
+                    // Check rows
+                    if ( j + 2 < 5&&board[i][j] == u && board[i][j + 1] == u && board[i][j + 2] == u)
                     {
                         player[z]++;
                     }
-                    if (board[j][i] == u && board[j + 1][i] == u && board[j + 2][i] == u)
+                    //Check columns
+                    if ( j + 2 < 5&&board[j][i] == u && board[j + 1][i] == u && board[j + 2][i] == u)
                     {
                         player[z]++;
                     }
-                }
-            }
-            // Check diagonals
-            for (int i = 0; i < 5; i++)
-            {
-                for(int j=0; j<5; j++)
-                {
-                    //check the main diagonal
+                    //Check the main diagonal
                     if ( i + 2 < 5 && j + 2 < 5&&board[i][j]==u && board[i+1][j+1]==u&& board[i+2][j+2]==u )
+                    {
                         player[z]++;
-                      //check the anti diagonal
-                    if(i + 2 < 5 && j - 2 >=0 &&board[i][j]==u && board[i+1][j-1]==u&&board[i+2][j-2]==u)
-                        player[z]++;
+                    }
 
+                    //Check the anti diagonal
+                    if(i + 2 < 5 && j - 2 >=0 &&board[i][j]==u && board[i+1][j-1]==u&&board[i+2][j-2]==u)
+                    {
+                        player[z]++;
+                    }
                 }
             }
             u = 'O';
@@ -94,12 +92,10 @@ bool FiveBF_board::is_winner()
         {
             cout<<"X is winner"<<endl;
         }
-
         else if (player[0]<player[1])
         {
             cout<<"O is winner"<<endl;
         }
-
     }
     return false;
 }
@@ -110,7 +106,7 @@ bool FiveBF_board::is_draw()
     {
         return (player[0]==player[1]);
     }
-return false;
+    return false;
 }
 
 bool FiveBF_board::game_is_over ()
