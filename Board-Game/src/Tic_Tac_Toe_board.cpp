@@ -1,3 +1,9 @@
+// File name: Tic_Tac_Toe_board.cpp
+// Purpose: Pyramic Tic-Tac-Toe
+// Author(s): Nada Abobaker
+// ID(s): 20220715
+// Section: S27
+// Date: 14 Dec 2023
 #include <bits/stdc++.h>
 #include <iostream>
 #include <random>
@@ -40,29 +46,29 @@ void Tic_Tac_Toe_board:: display_board() {
     {
         if(i == 0)
             cout << '\n' << setw(18) << "| ";
-        else if(i == 1) 
+        else if(i == 1)
             cout << '\n' << setw(10) << "| ";
         else
-            cout << "\n| ";   
+            cout << "\n| ";
         for (int j = 0; j < n_cols; j++)
         {
             if((i == 0 && j != 2) || (i == 1 && j == 0) || (i == 1 && j == 4))
                 continue;
             if(board[i][j] != ' ')
                 cout << "  " << board[i][j] << "   ";
-            else 
+            else
                 cout << "(" << i << "," << j << ") ";
             cout << "| ";
         }
         cout << '\n';
         if(i == 0)
             cout << setw(25) << "---------";
-        else if(i == 1) 
+        else if(i == 1)
             cout << setw(33) << "-------------------------";
-        else 
+        else
             cout << "-----------------------------------------";
     }
-    
+
 }
 bool Tic_Tac_Toe_board::is_winner() {
     if (board[1][1] == board[1][2] && board[1][2] == board[1][3] && board[1][1]!= ' ') {

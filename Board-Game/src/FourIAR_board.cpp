@@ -1,7 +1,9 @@
-// Class definition for X_O_Board class
-// Author:  Mohammad El-Ramly
-// Date:    10/10/2022
-// Version: 1
+// File name: FourIAR_board.cpp
+// Purpose: Four-in-a-row
+// Author(s): Ahmed Ashraf
+// ID(s): 20230606
+// Section: S27
+// Date: 13 Dec 2023
 #include <bits/stdc++.h>
 #include <iostream>
 #include <random>
@@ -41,25 +43,25 @@ bool FourIAR_board::update_board (int x, int y, char mark){
 void FourIAR_board::display_board() {
    for (int i = 0; i < n_rows; i++)
    {
-      cout << "\n| ";   
+      cout << "\n| ";
       for (int j = 0; j < n_cols; j++)
       {
          if(board[i][j] != '0')
             cout << "  " << board[i][j] << "   ";
-         else 
+         else
             cout << "(" << i << "," << j << ") ";
          cout << "| ";
       }
       cout << "\n---------------------------------------------------------";
    }
-   
+
 }
 
 bool FourIAR_board::checkingIsWinner(int x, int y){
    int freq[256]{};
    for (int i = x; i < min(x+4, 6); i++)
    {
-      char c = board[i][y]; 
+      char c = board[i][y];
       if(c != '0')
          freq[c]++;
    }
@@ -68,9 +70,9 @@ bool FourIAR_board::checkingIsWinner(int x, int y){
    memset(freq, 0, sizeof(freq));
    for (int i = y; i < min(y+4, 7); i++)
    {
-      char c = board[x][i]; 
+      char c = board[x][i];
       if(c != '0')
-         freq[c]++;   
+         freq[c]++;
    }
    if (freq['X'] == 4 || freq['O'] == 4)
       return 1;

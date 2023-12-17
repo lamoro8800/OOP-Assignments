@@ -1,8 +1,9 @@
-// Class definition for XO_App class
-// Author:  Mohammad El-Ramly
-// Date:    10/10/2022
-// Version: 1
-
+// File name: Main_App.cpp
+// Purpose: The Integrated App
+// Author(s): Ahmed Ashraf
+// ID(s): 20230606
+// Section: S27
+// Date:16 Dec 2023
 #include <iostream>
 #include"../include/BoardGame_Classes.hpp"
 using namespace std;
@@ -15,7 +16,7 @@ int main() {
     cout << "1- Tic-Tac-Toe\n";
     cout << "2- Foun in a row\n";
     cout << "3- Five by five\n";
-    cin >> op; 
+    cin >> op;
     //1 X O game
     if(op == 1){
         //create the first player from type Player
@@ -34,7 +35,7 @@ int main() {
 
     //2 four in a row game
     }else if(op == 2){
-        //create the first player from type Player_FourIAR -> FourIAR is for Four In A Row 
+        //create the first player from type Player_FourIAR -> FourIAR is for Four In A Row
         players[0] = new FourIAR_Player(1, 'x');
         cout << "Press 1 if you want to play with computer: ";
         int computerChoice;
@@ -64,7 +65,7 @@ int main() {
         fiveBF_game.run();
     }else if(op == 0)
         return 1;
-    else 
+    else
         cout << "Invalid choice\n";
 
     //0 to exit
